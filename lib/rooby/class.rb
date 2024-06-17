@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# frozen_string_literal
-
 module Rooby
   class Class
     INDENT = "  "
