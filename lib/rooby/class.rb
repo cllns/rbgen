@@ -2,15 +2,27 @@
 
 module Rooby
   class Class
-    def initialize(name)
+    def initialize(name, parent = nil)
       @name = name
+      @parent = parent
     end
 
     def to_s
-      <<~OUTPUT
-        class #{@name}
-        end
-      OUTPUT
+      if parent
+        <<~OUTPUT
+          class #{@name} < #{@parent}
+          end
+        OUTPUT
+      else
+        <<~OUTPUT
+          class #{@name}
+          end
+        OUTPUT
+      end
     end
+
+    private
+
+    attr_reader :name, :parent
   end
 end
