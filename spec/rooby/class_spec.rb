@@ -53,7 +53,7 @@ RSpec.describe Rooby::Class do
     end
   end
 
-  describe "with multiple modules" do
+  describe "with two modules" do
     it "generates class without parent class" do
       expect(Rooby::Class.new("Greeter", modules: %w[Admin Services]).to_s).to(
         eq(
@@ -76,6 +76,42 @@ RSpec.describe Rooby::Class do
             module Admin
               module Services
                 class Greeter < BaseService
+                end
+              end
+            end
+          OUTPUT
+        )
+      )
+    end
+  end
+
+  describe "with three modules" do
+    it "generates class without parent class" do
+      expect(Rooby::Class.new("Greeter", modules: %w[Internal Admin Services]).to_s).to(
+        eq(
+          <<~OUTPUT
+            module Internal
+              module Admin
+                module Services
+                  class Greeter
+                  end
+                end
+              end
+            end
+          OUTPUT
+        )
+      )
+    end
+
+    it "generates class with parent class" do
+      expect(Rooby::Class.new("Greeter", "BaseService", modules: %w[Internal Admin Services]).to_s).to(
+        eq(
+          <<~OUTPUT
+            module Internal
+              module Admin
+                module Services
+                  class Greeter < BaseService
+                  end
                 end
               end
             end

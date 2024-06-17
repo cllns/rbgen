@@ -31,6 +31,8 @@ module Rooby
         with_module_lines(modules[0], class_lines)
       elsif modules.size == 2
         with_module_lines(modules[0], with_module_lines(modules[1], class_lines))
+      elsif modules.size == 3
+        with_module_lines(modules[0], with_module_lines(modules[1], with_module_lines(modules[2], class_lines)))
       end
     end
 
