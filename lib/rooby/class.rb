@@ -4,6 +4,8 @@
 
 module Rooby
   class Class
+    INDENT = "  "
+
     def initialize(name, parent = nil, modules: [])
       @name = name
       @parent = parent
@@ -11,45 +13,29 @@ module Rooby
     end
 
     def to_s
-      if modules.any?
-        with_modules
-      else
-        without_modules
-      end
+      lines = if modules.any?
+                with_modules_lines
+              else
+                class_lines
+              end
+
+      lines.map { |line| "#{line}\n" }.join
     end
 
     private
 
     attr_reader :name, :parent, :modules
 
-    def without_modules
-      class_lines.map { |line| line + "\n" }.join
+    def with_modules_lines
+      with_module_lines(modules.join("::"), class_lines)
     end
 
-    def with_modules
-      if parent
-        with_parent_and_with_modules
-      else
-        without_parent_and_with_modules
-      end
-    end
-
-    def with_parent_and_with_modules
-      <<~OUTPUT
-        module #{modules.join('::')}
-          class #{name} < #{parent}
-          end
-        end
-      OUTPUT
-    end
-
-    def without_parent_and_with_modules
-      <<~OUTPUT
-        module #{modules.join('::')}
-          class #{name}
-          end
-        end
-      OUTPUT
+    def with_module_lines(module_name, contents_lines)
+      [
+        "module #{module_name}",
+        *contents_lines.map { |line| INDENT + line },
+        "end"
+      ]
     end
 
     def class_lines
