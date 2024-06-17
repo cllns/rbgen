@@ -362,11 +362,18 @@ RSpec.describe Rooby::Class do
       end
 
       describe "top-level" do
-        it "generates class without parent class" do
-          expect(Rooby::Class.new("Greeter").to_s).to(
+        it "generates class without parent class and both requires and relative_requires" do
+          expect(Rooby::Class.new(
+            "Greeter",
+            requires: ["roobi/fake"],
+            relative_requires: ["secret/parser"]
+          ).to_s).to(
             eq(
               <<~OUTPUT
                 # frozen_string_literal: true
+
+                require "roobi/fake"
+                require_relative "secret/parser"
 
                 class Greeter
                 end

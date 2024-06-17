@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "dry-configurable"
-
 require_relative "rooby/version"
 require_relative "rooby/class"
 require_relative "rooby/errors"

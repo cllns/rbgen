@@ -5,11 +5,12 @@ module Rooby
     INDENT = "  "
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(name, parent = nil, modules: [], requires: [], methods: {}, ivars: [])
+    def initialize(name, parent = nil, modules: [], requires: [], relative_requires: [], methods: {}, ivars: [])
       @name = name
       @parent = parent
       @modules = modules
       @requires = requires
+      @relative_requires = relative_requires
       @methods = methods
       @ivar_names = parse_ivar_names!(ivars)
 
@@ -25,7 +26,7 @@ module Rooby
 
     private
 
-    attr_reader :name, :parent, :modules, :requires, :methods, :ivar_names
+    attr_reader :name, :parent, :modules, :requires, :relative_requires, :methods, :ivar_names
 
     def lines(remaining_modules)
       this_module, *rest_modules = remaining_modules
@@ -45,7 +46,7 @@ module Rooby
     end
 
     def file_directives
-      [frozen_string_literal, requires_lines].compact
+      [frozen_string_literal, import_lines].compact
     end
 
     def frozen_string_literal
@@ -54,12 +55,22 @@ module Rooby
       end
     end
 
+    def import_lines
+      lines = [requires_lines, relative_requires_lines].flatten.compact
+      if lines.any?
+        lines << ""
+      end
+    end
+
     def requires_lines
-      lines = requires.map do |require|
+      requires.map do |require|
         %(require "#{require}")
       end
-      if lines.any?
-        lines + [""]
+    end
+
+    def relative_requires_lines
+      relative_requires.map do |require|
+        %(require_relative "#{require}")
       end
     end
 
