@@ -4,10 +4,11 @@ module Rooby
   class Class
     INDENT = "  "
 
-    def initialize(name, parent = nil, modules: [])
+    def initialize(name, parent = nil, modules: [], methods: {})
       @name = name
       @parent = parent
       @modules = modules
+      @methods = methods
     end
 
     def to_s
@@ -22,7 +23,7 @@ module Rooby
 
     private
 
-    attr_reader :name, :parent, :modules
+    attr_reader :name, :parent, :modules, :methods
 
     def lines(remaining_modules)
       this_module, *rest_modules = remaining_modules
@@ -36,7 +37,7 @@ module Rooby
     def with_module_lines(module_name, contents_lines)
       [
         "module #{module_name}",
-        *contents_lines.map { |line| INDENT + line },
+        *contents_lines.map { |line| indent(line) },
         "end"
       ]
     end
@@ -44,8 +45,21 @@ module Rooby
     def class_lines
       [
         class_definition,
+        *class_contents_lines,
         "end"
-      ]
+      ].compact
+    end
+
+    def class_contents_lines
+      methods_lines.map { |line| indent(line) }
+    end
+
+    def methods_lines
+      # To add a newline between each method, we add an empty string to the end
+      # of each method definition then remove the very last one
+      methods.flat_map do |method_name, args|
+        [method_definition(method_name, args), "end", ""]
+      end[0...-1]
     end
 
     def class_definition
@@ -53,6 +67,22 @@ module Rooby
         "class #{name} < #{parent}"
       else
         "class #{name}"
+      end
+    end
+
+    def method_definition(method_name, args)
+      if args
+        "def #{method_name}(#{args.join(', ')})"
+      else
+        "def #{method_name}"
+      end
+    end
+
+    def indent(line)
+      if line.strip.empty?
+        ""
+      else
+        INDENT + line
       end
     end
   end
