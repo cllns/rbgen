@@ -311,6 +311,25 @@ RSpec.describe Rooby::Class do
           )
         end
 
+        it "raises error when ivars don't lead with @" do
+          expect {
+            Rooby::Class.new(
+              "Greeter",
+              ivars: %w[name]
+            ).to_s
+          }.to(raise_error(Rooby::InvalidInstanceVariablesError))
+        end
+
+        it "raises error when 'initialize' method is specified and ivars are present" do
+          expect {
+            Rooby::Class.new(
+              "Greeter",
+              ivars: %w[@name],
+              methods: {initialize: nil}
+            ).to_s
+          }.to(raise_error(Rooby::DuplicateInitializeMethodError))
+        end
+
         it "generates class with parent class" do
           expect(Rooby::Class.new("Greeter", "BaseService", modules: %w[Internal Admin Services]).to_s).to(
             eq(

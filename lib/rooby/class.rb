@@ -9,12 +9,8 @@ module Rooby
       @parent = parent
       @modules = modules
       @methods = methods
-
-      unless ivars.all? { |ivar| ivar.start_with?("@") }
-        raise ArguemtnError "All ivars must start with @"
-      end
-
-      @ivar_names = ivars.map { |ivar| ivar.split("@")[1] }
+      @ivar_names = parse_ivar_names(ivars)
+      raise DuplicateInitializeMethodError if methods.key?(:initialize) && ivars.any?
     end
 
     def to_s
@@ -114,6 +110,14 @@ module Rooby
         ""
       else
         INDENT + line
+      end
+    end
+
+    def parse_ivar_names(ivars)
+      if ivars.all? { |ivar| ivar.start_with?("@") }
+        ivars.map { |ivar| ivar.delete_prefix("@") }
+      else
+        raise InvalidInstanceVariablesError
       end
     end
   end
