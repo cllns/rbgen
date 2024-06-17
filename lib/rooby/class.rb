@@ -4,28 +4,28 @@ module Rooby
   class Class
     INDENT = "  "
 
-    def initialize(name, parent = nil, modules: [], methods: {}, ivars: [])
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(name, parent = nil, modules: [], requires: [], methods: {}, ivars: [])
       @name = name
       @parent = parent
       @modules = modules
+      @requires = requires
       @methods = methods
-      @ivar_names = parse_ivar_names(ivars)
+      @ivar_names = parse_ivar_names!(ivars)
+
       raise DuplicateInitializeMethodError if methods.key?(:initialize) && ivars.any?
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def to_s
       definition = lines(modules).map { |line| "#{line}\n" }.join
 
-      if Rooby.config.frozen_string_literal
-        ["# frozen_string_literal: true", "", definition].join("\n")
-      else
-        definition
-      end
+      [file_directives, definition].flatten.join("\n")
     end
 
     private
 
-    attr_reader :name, :parent, :modules, :methods, :ivar_names
+    attr_reader :name, :parent, :modules, :requires, :methods, :ivar_names
 
     def lines(remaining_modules)
       this_module, *rest_modules = remaining_modules
@@ -42,6 +42,25 @@ module Rooby
         *contents_lines.map { |line| indent(line) },
         "end"
       ]
+    end
+
+    def file_directives
+      [frozen_string_literal, requires_lines].compact
+    end
+
+    def frozen_string_literal
+      if Rooby.config.frozen_string_literal
+        ["# frozen_string_literal: true", ""].join("\n")
+      end
+    end
+
+    def requires_lines
+      lines = requires.map do |require|
+        %(require "#{require}")
+      end
+      if lines.any?
+        lines + [""]
+      end
     end
 
     def class_lines
@@ -113,7 +132,7 @@ module Rooby
       end
     end
 
-    def parse_ivar_names(ivars)
+    def parse_ivar_names!(ivars)
       if ivars.all? { |ivar| ivar.start_with?("@") }
         ivars.map { |ivar| ivar.delete_prefix("@") }
       else

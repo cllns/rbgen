@@ -330,10 +330,17 @@ RSpec.describe Rooby::Class do
           }.to(raise_error(Rooby::DuplicateInitializeMethodError))
         end
 
-        it "generates class with parent class" do
-          expect(Rooby::Class.new("Greeter", "BaseService", modules: %w[Internal Admin Services]).to_s).to(
+        it "generates class with parent class, and requires" do
+          expect(Rooby::Class.new(
+            "Greeter",
+            "BaseService",
+            modules: %w[Internal Admin Services],
+            requires: ["roobi/fake"]
+          ).to_s).to(
             eq(
               <<~OUTPUT
+                require "roobi/fake"
+
                 module Internal
                   module Admin
                     module Services
