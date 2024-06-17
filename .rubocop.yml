@@ -1,0 +1,6 @@
+inherit_from:
+- https://raw.githubusercontent.com/hanami/devtools/master/.rubocop.yml
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+Layout/FirstArgumentIndentation:
+  Enabled: false
