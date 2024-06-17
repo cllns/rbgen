@@ -32,14 +32,14 @@ module Rooby
 
     def with_parent_and_without_modules
       <<~OUTPUT
-        class #{@name} < #{@parent}
+        class #{name} < #{parent}
         end
       OUTPUT
     end
 
     def without_parent_and_without_modules
       <<~OUTPUT
-        class #{@name}
+        class #{name}
         end
       OUTPUT
     end
@@ -54,8 +54,8 @@ module Rooby
 
     def with_parent_and_with_modules
       <<~OUTPUT
-        module #{@modules.join('::')}
-          class #{@name} < #{@parent}
+        module #{modules.join('::')}
+          class #{name} < #{parent}
           end
         end
       OUTPUT
@@ -63,8 +63,8 @@ module Rooby
 
     def without_parent_and_with_modules
       <<~OUTPUT
-        module #{@modules.join('::')}
-          class #{@name}
+        module #{modules.join('::')}
+          class #{name}
           end
         end
       OUTPUT
