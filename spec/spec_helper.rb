@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 require "rooby"
+require "dry/configurable/test_interface"
+
+module Rooby
+  enable_test_interface
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

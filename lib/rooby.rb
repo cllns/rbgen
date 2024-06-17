@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+require "dry-configurable"
+
 require_relative "rooby/version"
 require_relative "rooby/class"
 
 module Rooby
-  class Error < StandardError
-  end
+  extend Dry::Configurable
+
+  setting :frozen_string_literal, default: true
 end

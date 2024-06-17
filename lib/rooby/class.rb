@@ -11,7 +11,13 @@ module Rooby
     end
 
     def to_s
-      lines(modules).map { |line| "#{line}\n" }.join
+      definition = lines(modules).map { |line| "#{line}\n" }.join
+
+      if Rooby.config.frozen_string_literal
+        ["# frozen_string_literal: true", "", definition].join("\n")
+      else
+        definition
+      end
     end
 
     private
