@@ -1,5 +1,7 @@
 inherit_from:
 - https://raw.githubusercontent.com/hanami/devtools/master/.rubocop.yml
+AllCops:
+  TargetRubyVersion: 3.3
 Layout/EmptyLinesAroundExceptionHandlingKeywords:
   Enabled: false
 Layout/FirstArgumentIndentation:
