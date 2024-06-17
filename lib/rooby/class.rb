@@ -13,26 +13,19 @@ module Rooby
     end
 
     def to_s
-      lines = if modules.any?
-                with_modules_lines
-              else
-                class_lines
-              end
-
-      lines.map { |line| "#{line}\n" }.join
+      lines(modules).map { |line| "#{line}\n" }.join
     end
 
     private
 
     attr_reader :name, :parent, :modules
 
-    def with_modules_lines
-      if modules.size == 1
-        with_module_lines(modules[0], class_lines)
-      elsif modules.size == 2
-        with_module_lines(modules[0], with_module_lines(modules[1], class_lines))
-      elsif modules.size == 3
-        with_module_lines(modules[0], with_module_lines(modules[1], with_module_lines(modules[2], class_lines)))
+    def lines(remaining_modules)
+      this_module, *rest_modules = remaining_modules
+      if this_module
+        with_module_lines(this_module, lines(rest_modules))
+      else
+        class_lines
       end
     end
 
