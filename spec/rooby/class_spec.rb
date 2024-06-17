@@ -280,14 +280,28 @@ RSpec.describe Rooby::Class do
       end
 
       describe "with three modules" do
-        it "generates class without parent class" do
-          expect(Rooby::Class.new("Greeter", modules: %w[Internal Admin Services]).to_s).to(
+        it "generates class without parent class, with ivars" do
+          expect(
+            Rooby::Class.new(
+              "Greeter",
+              modules: %w[Internal Admin Services],
+              ivars: ["@name", "@birthdate"]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Internal
                   module Admin
                     module Services
                       class Greeter
+                        def initialize(name:, birthdate:)
+                          @name = name
+                          @birthdate = birthdate
+                        end
+
+                        private
+
+                        attr_reader :name, :birthdate
                       end
                     end
                   end

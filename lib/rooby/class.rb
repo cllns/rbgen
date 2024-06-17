@@ -4,11 +4,17 @@ module Rooby
   class Class
     INDENT = "  "
 
-    def initialize(name, parent = nil, modules: [], methods: {})
+    def initialize(name, parent = nil, modules: [], methods: {}, ivars: [])
       @name = name
       @parent = parent
       @modules = modules
       @methods = methods
+
+      unless ivars.all? { |ivar| ivar.start_with?("@") }
+        raise ArguemtnError "All ivars must start with @"
+      end
+
+      @ivar_names = ivars.map { |ivar| ivar.split("@")[1] }
     end
 
     def to_s
@@ -23,7 +29,7 @@ module Rooby
 
     private
 
-    attr_reader :name, :parent, :modules, :methods
+    attr_reader :name, :parent, :modules, :methods, :ivar_names
 
     def lines(remaining_modules)
       this_module, *rest_modules = remaining_modules
@@ -51,7 +57,32 @@ module Rooby
     end
 
     def class_contents_lines
-      methods_lines.map { |line| indent(line) }
+      [
+        initialize_lines,
+        methods_lines,
+        private_contents_lines
+      ].compact.flatten.map { |line| indent(line) }
+    end
+
+    def initialize_lines
+      if ivar_names.any?
+        [
+          method_definition("initialize", ivar_names.map { |ivar| "#{ivar}:" }),
+          ivar_names.map { |ivar_name| indent("@#{ivar_name} = #{ivar_name}") }.flatten,
+          "end"
+        ]
+      end
+    end
+
+    def private_contents_lines
+      if ivar_names.any?
+        [
+          " ",
+          "private",
+          "",
+          "attr_reader #{ivar_names.map { |ivar| ":#{ivar}" }.join(', ')}"
+        ]
+      end
     end
 
     def methods_lines
