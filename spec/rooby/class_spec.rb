@@ -58,8 +58,10 @@ RSpec.describe Rooby::Class do
       expect(Rooby::Class.new("Greeter", modules: %w[Admin Services]).to_s).to(
         eq(
           <<~OUTPUT
-            module Admin::Services
-              class Greeter
+            module Admin
+              module Services
+                class Greeter
+                end
               end
             end
           OUTPUT
@@ -71,8 +73,10 @@ RSpec.describe Rooby::Class do
       expect(Rooby::Class.new("Greeter", "BaseService", modules: %w[Admin Services]).to_s).to(
         eq(
           <<~OUTPUT
-            module Admin::Services
-              class Greeter < BaseService
+            module Admin
+              module Services
+                class Greeter < BaseService
+                end
               end
             end
           OUTPUT

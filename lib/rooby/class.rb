@@ -27,7 +27,11 @@ module Rooby
     attr_reader :name, :parent, :modules
 
     def with_modules_lines
-      with_module_lines(modules.join("::"), class_lines)
+      if modules.size == 1
+        with_module_lines(modules[0], class_lines)
+      elsif modules.size == 2
+        with_module_lines(modules[0], with_module_lines(modules[1], class_lines))
+      end
     end
 
     def with_module_lines(module_name, contents_lines)
