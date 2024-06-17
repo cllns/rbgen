@@ -23,25 +23,7 @@ module Rooby
     attr_reader :name, :parent, :modules
 
     def without_modules
-      if parent
-        with_parent_and_without_modules
-      else
-        without_parent_and_without_modules
-      end
-    end
-
-    def with_parent_and_without_modules
-      <<~OUTPUT
-        class #{name} < #{parent}
-        end
-      OUTPUT
-    end
-
-    def without_parent_and_without_modules
-      <<~OUTPUT
-        class #{name}
-        end
-      OUTPUT
+      class_lines.map { |line| line + "\n" }.join
     end
 
     def with_modules
@@ -68,6 +50,21 @@ module Rooby
           end
         end
       OUTPUT
+    end
+
+    def class_lines
+      [
+        class_definition,
+        "end"
+      ]
+    end
+
+    def class_definition
+      if parent
+        "class #{name} < #{parent}"
+      else
+        "class #{name}"
+      end
     end
   end
 end
