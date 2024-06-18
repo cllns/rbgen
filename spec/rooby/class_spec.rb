@@ -280,12 +280,13 @@ RSpec.describe Rooby::Class do
       end
 
       describe "with three modules" do
-        it "generates class without parent class, with ivars" do
+        it "generates class without parent class, with ivars and method" do
           expect(
             Rooby::Class.new(
               "Greeter",
               modules: %w[Internal Admin Services],
-              ivars: [:@name, :@birthdate]
+              ivars: [:@name, :@birthdate],
+              methods: {call: [:env]}
             ).to_s
           ).to(
             eq(
@@ -297,6 +298,9 @@ RSpec.describe Rooby::Class do
                         def initialize(name:, birthdate:)
                           @name = name
                           @birthdate = birthdate
+                        end
+
+                        def call(env)
                         end
 
                         private

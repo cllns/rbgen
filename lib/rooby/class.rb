@@ -99,7 +99,8 @@ module Rooby
         [
           method_definition("initialize", ivar_names.map { |ivar| "#{ivar}:" }),
           ivar_names.map { |ivar_name| indent("@#{ivar_name} = #{ivar_name}") }.flatten,
-          "end"
+          "end",
+          ""
         ]
       end
     end
