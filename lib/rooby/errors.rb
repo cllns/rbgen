@@ -14,4 +14,20 @@ module Rooby
       super("Initialize method cannot be defined if instance variables are present")
     end
   end
+
+  class GeneratedUnparseableCodeError < Error
+    def initialize(source_code)
+      super(
+        <<~ERROR_MESSAGE
+          Sorry, the code we generated is not valid Ruby.
+
+          Here's what we got:
+
+          #{source_code}
+
+          Please fix the errors and try again.
+        ERROR_MESSAGE
+      )
+    end
+  end
 end

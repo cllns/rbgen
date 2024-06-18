@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "prism"
+
 module Rooby
   class Class
     INDENT = "  "
@@ -21,7 +23,9 @@ module Rooby
     def to_s
       definition = lines(modules).map { |line| "#{line}\n" }.join
 
-      [file_directives, definition].flatten.join("\n")
+      source_code = [file_directives, definition].flatten.join("\n")
+
+      ensure_parseable!(source_code)
     end
 
     private
@@ -148,6 +152,16 @@ module Rooby
         ivars.map { |ivar| ivar.delete_prefix("@") }
       else
         raise InvalidInstanceVariablesError
+      end
+    end
+
+    def ensure_parseable!(source_code)
+      parse_result = Prism.parse(source_code)
+
+      if parse_result.success?
+        source_code
+      else
+        raise GeneratedUnparseableCodeError.new(source_code)
       end
     end
   end

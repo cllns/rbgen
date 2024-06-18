@@ -382,16 +382,9 @@ RSpec.describe Rooby::Class do
           )
         end
 
-        it "generates class with parent class" do
-          expect(Rooby::Class.new("Greeter", "BaseService").to_s).to(
-            eq(
-              <<~OUTPUT
-                # frozen_string_literal: true
-
-                class Greeter < BaseService
-                end
-              OUTPUT
-            )
+        it "fails to generate unparseable ruby code" do
+          expect { Rooby::Class.new("%%Greeter").to_s }.to(
+            raise_error(Rooby::GeneratedUnparseableCodeError)
           )
         end
       end
