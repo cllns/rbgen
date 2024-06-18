@@ -149,7 +149,7 @@ module Rooby
 
     def parse_ivar_names!(ivars)
       if ivars.all? { |ivar| ivar.start_with?("@") }
-        ivars.map { |ivar| ivar.delete_prefix("@") }
+        ivars.map { |ivar| ivar.to_s.delete_prefix("@") }
       else
         raise InvalidInstanceVariablesError
       end

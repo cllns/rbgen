@@ -285,7 +285,7 @@ RSpec.describe Rooby::Class do
             Rooby::Class.new(
               "Greeter",
               modules: %w[Internal Admin Services],
-              ivars: ["@name", "@birthdate"]
+              ivars: [:@name, :@birthdate]
             ).to_s
           ).to(
             eq(
@@ -315,7 +315,7 @@ RSpec.describe Rooby::Class do
           expect {
             Rooby::Class.new(
               "Greeter",
-              ivars: %w[name]
+              ivars: [:name]
             ).to_s
           }.to(raise_error(Rooby::InvalidInstanceVariablesError))
         end
@@ -324,7 +324,7 @@ RSpec.describe Rooby::Class do
           expect {
             Rooby::Class.new(
               "Greeter",
-              ivars: %w[@name],
+              ivars: [:@name],
               methods: {initialize: nil}
             ).to_s
           }.to(raise_error(Rooby::DuplicateInitializeMethodError))
