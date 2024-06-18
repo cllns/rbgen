@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require_relative "lib/rooby/version"
+require_relative "lib/rbgen/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "rooby"
-  spec.version = Rooby::VERSION
+  spec.name = "rbgen"
+  spec.version = RbGen::VERSION
   spec.authors = ["Sean Collins"]
   spec.email = ["sean@cllns.com"]
 
   spec.summary = "Ruby code generation"
-  spec.homepage = "https://github.com/cllns/rooby"
+  spec.homepage = "https://github.com/cllns/rbgen"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.3.0"
 

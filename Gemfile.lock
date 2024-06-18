@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rooby (0.1.0)
+    rbgen (0.1.0)
       dry-configurable (~> 1.0)
 
 GEM
@@ -65,7 +65,7 @@ PLATFORMS
 
 DEPENDENCIES
   rake (~> 13.0)
-  rooby!
+  rbgen!
   rspec (~> 3.0)
   rubocop (~> 1.21)
 

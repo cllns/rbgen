@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in rooby.gemspec
+# Specify your gem's dependencies in rbgen.gemspec
 gemspec
 
 gem "rake", "~> 13.0"

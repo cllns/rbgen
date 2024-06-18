@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Rooby
+module RbGen
   class Error < StandardError; end
 
   class InvalidInstanceVariablesError < Error

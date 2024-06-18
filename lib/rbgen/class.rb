@@ -2,7 +2,7 @@
 
 require "prism"
 
-module Rooby
+module RbGen
   class Class
     INDENT = "  "
 
@@ -54,7 +54,7 @@ module Rooby
     end
 
     def frozen_string_literal
-      if Rooby.config.frozen_string_literal
+      if RbGen.config.frozen_string_literal
         ["# frozen_string_literal: true", ""].join("\n")
       end
     end

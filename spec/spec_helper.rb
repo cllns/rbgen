@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "rooby"
+require "rbgen"
 require "dry/configurable/test_interface"
 
-module Rooby
+module RbGen
   enable_test_interface
 end
 

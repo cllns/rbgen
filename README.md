@@ -1,22 +1,20 @@
-# Rooby
+# RbGen
 
-Rooby is a Ruby class generator.
+RbGen is a Ruby class generator.
 
 ## Installation
 
-The name `rooby` is currently taken on Rubygems, so for now you'll have to use this github source.
-
-I'll try to get that name transfered to me, but if it's not, I'll have to rename this gem.
+Add the following to your `Gemfile`:
 
 ```bash
-gem "rooby", github: "cllns/rooby"
+gem "rbgen"
 ```
 
 ## Usage
 
 Simple example:
 ```ruby
-#> puts Rooby::Class.new("Greeter", "BaseService").to_s
+#> puts RbGen::Class.new("Greeter", "BaseService").to_s
 ```
 
 Outputs:
@@ -30,7 +28,7 @@ Outputs:
 
 Nested module example
 ```ruby
- puts Rooby::Class.new("Greeter", "BaseService", modules: ["Admin)
+ puts RbGen::Class.new("Greeter", "BaseService", modules: ["Admin)
 ```
 
 Outputs:
@@ -49,7 +47,7 @@ end
 
 Full example:
 ```ruby
-puts Rooby::Class.new(
+puts RbGen::Class.new(
     "Greeter",
     "Base",
     modules: ["Admin", "Services"],
@@ -97,7 +95,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/cllns/rooby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/rooby/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/cllns/rbgen. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/rbgen/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -105,4 +103,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Rooby project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/cllns/rooby/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the RbGen project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/cllns/rbgen/blob/main/CODE_OF_CONDUCT.md).
