@@ -1,10 +1,10 @@
 # RbGen
 
-RbGen is a Ruby class generator.
+RbGen is a Ruby file generator.
 
 ## Installation
 
-Add the following to your `Gemfile`:
+Add the following line to your `Gemfile`:
 
 ```bash
 gem "rbgen"
@@ -12,9 +12,9 @@ gem "rbgen"
 
 ## Usage
 
-Simple example:
+### Simple example:
 ```ruby
-#> puts RbGen::Class.new("Greeter", "BaseService").to_s
+puts RbGen::Class.new("Greeter", "BaseService").to_s
 ```
 
 Outputs:
@@ -26,9 +26,9 @@ Outputs:
 #  end
 ```
 
-Nested module example
+### Nested modules example
 ```ruby
- puts RbGen::Class.new("Greeter", "BaseService", modules: ["Admin)
+puts RbGen::Class.new("Greeter", "BaseService", modules: ["Admin", "Services"]).to_s
 ```
 
 Outputs:
@@ -45,7 +45,7 @@ end
 ```
 
 
-Full example:
+### Full example
 ```ruby
 puts RbGen::Class.new(
     "Greeter",
