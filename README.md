@@ -1,14 +1,36 @@
 # RbGen
 
-RbGen is a Ruby file generator.
+RbGen is a Ruby file generator, for generating simple (and mostly empty) Ruby classes from simple Ruby object creation.
+
+It was created out of a sense of curiosity and experimentation.
 
 ## Installation
 
 Add the following line to your `Gemfile`:
 
-```bash
+```ruby
 gem "rbgen", github: "cllns/rbgen"
 ```
+
+## Features & TODO's
+- [x] Name of class
+- [x] Name of parent class
+- [x] Add `modules`
+- [x] Add `frozen_string_literal`
+- [x] Add `methods`
+- [x] Add `ivars`
+- [x] Add `requires`
+- [x] Add `require`
+- [x] Add `require_relative`
+- [ ] Add `include` modules into class
+- [ ] Add prepend arbitrary code to class
+- [ ] Add tests/notes for inline module syntax
+
+### Maybe
+- [ ] Add `RbGen::Module`
+- [ ] Add CLI tool
+- [ ] Add dry-inflector support
+- [ ] Add support for writing to filesystem (including config for base location?)
 
 ## Usage
 
@@ -22,8 +44,8 @@ Outputs:
 ```ruby
 # frozen_string_literal: true
 
-#  class Greeter < BaseService
-#  end
+class Greeter < BaseService
+end
 ```
 
 ### Nested modules example
@@ -33,7 +55,7 @@ puts RbGen::Class.new("Greeter", "BaseService", modules: ["Admin", "Services"]).
 
 Outputs:
 
-```
+```ruby
 # frozen_string_literal: true
 
 module Admin
@@ -92,14 +114,6 @@ Caveats:
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-## TODO
-- [ ] Add `include` modules
-- [ ] Add prepend to class
-- [ ] Add `RbGen::Module`
-- [ ] Add writing to filesystem (including config for location)
-- [ ] Add CLI tool
-- [ ] Add tests/notes for inline module syntax
 
 ## Contributing
 
