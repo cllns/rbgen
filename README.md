@@ -7,7 +7,7 @@ RbGen is a Ruby file generator.
 Add the following line to your `Gemfile`:
 
 ```bash
-gem "rbgen"
+gem "rbgen", github: "cllns/rbgen"
 ```
 
 ## Usage
