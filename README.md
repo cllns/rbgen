@@ -24,7 +24,7 @@ gem "rbgen", github: "cllns/rbgen"
 - [x] Add `require_relative`
 - [x] Add `include` modules into class
 - [ ] Add prepend arbitrary code to class
-- [ ] Add tests/notes for inline module syntax
+- [x] Add tests/notes for inline module syntax
 
 ### Maybe
 - [ ] Add `RbGen::Module`
@@ -110,6 +110,7 @@ Caveats:
 - You can define your own empty `initialize` method with `methods:` but not if you use `ivars:`
 - `ivars:` must begin with `@`
 - We currently don't do *any* inflections, so you must write the strings in the proper format.
+- `modules:` *always nests* as separate module definitions. If you want inline syntax (for class name or parent class name or modules) just pass them in already joined together with `::`.
 
 ## Development
 

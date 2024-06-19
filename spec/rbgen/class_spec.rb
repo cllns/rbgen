@@ -376,6 +376,25 @@ RSpec.describe RbGen::Class do
           )
         end
       end
+
+      describe "with inline syntax name for module and class" do
+        it "generates class with includes" do
+          expect(RbGen::Class.new(
+            "Services::Greeter",
+            "Internal::BaseService",
+            modules: ["Internal::Admin"]
+          ).to_s).to(
+            eq(
+              <<~OUTPUT
+                module Internal::Admin
+                  class Services::Greeter < Internal::BaseService
+                  end
+                end
+              OUTPUT
+            )
+          )
+        end
+      end
     end
 
     describe "with frozen_string_literal (default)" do
