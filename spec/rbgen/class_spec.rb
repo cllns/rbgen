@@ -360,6 +360,24 @@ RSpec.describe RbGen::Class do
       end
     end
 
+    describe "with includes" do
+      it "generates class with includes" do
+        expect(RbGen::Class.new(
+          "Greeter",
+          includes: ["Enumerable", %(Import["external.api"])]
+        ).to_s).to(
+          eq(
+            <<~OUTPUT
+              class Greeter
+                include Enumerable
+                include Import["external.api"]
+              end
+            OUTPUT
+          )
+        )
+      end
+    end
+
     describe "with frozen_string_literal (default)" do
       before do
         RbGen.reset_config

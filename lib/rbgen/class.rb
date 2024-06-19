@@ -7,13 +7,23 @@ module RbGen
     INDENT = "  "
 
     # rubocop:disable Metrics/ParameterLists
-    def initialize(name, parent = nil, modules: [], requires: [], relative_requires: [], methods: {}, ivars: [])
+    def initialize(
+      name,
+      parent = nil,
+      modules: [],
+      requires: [],
+      relative_requires: [],
+      methods: {},
+      includes: [],
+      ivars: []
+    )
       @name = name
       @parent = parent
       @modules = modules
       @requires = requires
       @relative_requires = relative_requires
       @methods = methods
+      @includes = includes
       @ivar_names = parse_ivar_names!(ivars)
 
       raise DuplicateInitializeMethodError if methods.key?(:initialize) && ivars.any?
@@ -30,7 +40,7 @@ module RbGen
 
     private
 
-    attr_reader :name, :parent, :modules, :requires, :relative_requires, :methods, :ivar_names
+    attr_reader :name, :parent, :modules, :requires, :relative_requires, :methods, :includes, :ivar_names
 
     def lines(remaining_modules)
       this_module, *rest_modules = remaining_modules
@@ -81,9 +91,16 @@ module RbGen
     def class_lines
       [
         class_definition,
+        *includes_lines,
         *class_contents_lines,
         "end"
       ].compact
+    end
+
+    def includes_lines
+      includes.map do |include|
+        indent(%(include #{include}))
+      end
     end
 
     def class_contents_lines

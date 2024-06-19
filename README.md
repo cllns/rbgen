@@ -22,7 +22,7 @@ gem "rbgen", github: "cllns/rbgen"
 - [x] Add `requires`
 - [x] Add `require`
 - [x] Add `require_relative`
-- [ ] Add `include` modules into class
+- [x] Add `include` modules into class
 - [ ] Add prepend arbitrary code to class
 - [ ] Add tests/notes for inline module syntax
 
