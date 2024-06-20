@@ -26,7 +26,7 @@ gem "rbgen", github: "cllns/rbgen"
 - [x] Add prepend arbitrary code to class (`top_contents`)
 - [x] Add tests/notes for inline module syntax
 - [x] Add support for arbitrary magic comments
-- [ ] Move parent to kwarg
+- [x] Move parent to kwarg
 - [ ] Add `RbGen::Module`
 
 ### Maybe
@@ -36,9 +36,23 @@ gem "rbgen", github: "cllns/rbgen"
 
 ## Usage
 
-### Simple example:
+### Simplest example:
 ```ruby
-puts RbGen::Class.new("Greeter", "BaseService").to_s
+puts RbGen::Class.new("Greeter").to_s
+```
+
+Outputs:
+
+```ruby
+# frozen_string_literal: true
+
+class Greeter
+end
+```
+
+### Parent class example::
+```ruby
+puts RbGen::Class.new("Greeter", parent: "BaseService").to_s
 ```
 
 Outputs:
@@ -52,7 +66,7 @@ end
 
 ### Nested modules example
 ```ruby
-puts RbGen::Class.new("Greeter", "BaseService", modules: ["Admin", "Services"]).to_s
+puts RbGen::Class.new("Greeter", parent: "BaseService", modules: ["Admin", "Services"]).to_s
 ```
 
 Outputs:
@@ -73,7 +87,7 @@ end
 ```ruby
 puts RbGen::Class.new(
     "Greeter",
-    "Base",
+    parent: "Base",
     modules: ["Admin", "Services"],
     requires: ["prism"],
     relative_requires: ["secret/parser"],

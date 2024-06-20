@@ -9,7 +9,9 @@ RSpec.describe RbGen::Class do
 
       describe "top-level" do
         it "generates class without parent class" do
-          expect(RbGen::Class.new("Greeter").to_s).to(
+          expect(
+            RbGen::Class.new("Greeter").to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter
@@ -20,7 +22,9 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class" do
-          expect(RbGen::Class.new("Greeter", "BaseService").to_s).to(
+          expect(
+            RbGen::Class.new("Greeter", parent: "BaseService").to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter < BaseService
@@ -33,7 +37,9 @@ RSpec.describe RbGen::Class do
 
       describe "with single module" do
         it "generates class without parent class" do
-          expect(RbGen::Class.new("Greeter", modules: %w[Services]).to_s).to(
+          expect(
+            RbGen::Class.new("Greeter", modules: %w[Services]).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Services
@@ -46,22 +52,30 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class" do
-          expect(RbGen::Class.new("Greeter", "BaseService", modules: %w[Services]).to_s).to(
-            eq(
-              <<~OUTPUT
-                module Services
-                  class Greeter < BaseService
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              parent: "BaseService",
+              modules: %w[Services]
+            ).to_s
+          ).to(
+              eq(
+                <<~OUTPUT
+                  module Services
+                    class Greeter < BaseService
+                    end
                   end
-                end
-              OUTPUT
+                OUTPUT
+              )
             )
-          )
         end
       end
 
       describe "with two modules" do
         it "generates class without parent class" do
-          expect(RbGen::Class.new("Greeter", modules: %w[Admin Services]).to_s).to(
+          expect(
+            RbGen::Class.new("Greeter", modules: %w[Admin Services]).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Admin
@@ -76,7 +90,13 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class" do
-          expect(RbGen::Class.new("Greeter", "BaseService", modules: %w[Admin Services]).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              parent: "BaseService",
+              modules: %w[Admin Services]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Admin
@@ -93,7 +113,12 @@ RSpec.describe RbGen::Class do
 
       describe "with three modules" do
         it "generates class without parent class" do
-          expect(RbGen::Class.new("Greeter", modules: %w[Internal Admin Services]).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              modules: %w[Internal Admin Services]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Internal
@@ -110,7 +135,13 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class" do
-          expect(RbGen::Class.new("Greeter", "BaseService", modules: %w[Internal Admin Services]).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              parent: "BaseService",
+              modules: %w[Internal Admin Services]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Internal
@@ -135,7 +166,9 @@ RSpec.describe RbGen::Class do
 
       describe "top-level" do
         it "generates class without parent class" do
-          expect(RbGen::Class.new("Greeter").to_s).to(
+          expect(
+            RbGen::Class.new("Greeter").to_s
+          ).to(
             eq(
               <<~OUTPUT
                 # frozen_string_literal: true
@@ -148,7 +181,9 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class" do
-          expect(RbGen::Class.new("Greeter", "BaseService").to_s).to(
+          expect(
+            RbGen::Class.new("Greeter", parent: "BaseService").to_s
+          ).to(
             eq(
               <<~OUTPUT
                 # frozen_string_literal: true
@@ -171,7 +206,9 @@ RSpec.describe RbGen::Class do
 
       describe "top-level" do
         it "generates class without parent class and call method with no args" do
-          expect(RbGen::Class.new("Greeter", methods: {call: nil}).to_s).to(
+          expect(
+            RbGen::Class.new("Greeter", methods: {call: nil}).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter
@@ -184,7 +221,13 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class and call method with 1 arg" do
-          expect(RbGen::Class.new("Greeter", "BaseService", methods: {call: ["args"]}).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              parent: "BaseService",
+              methods: {call: ["args"]}
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter < BaseService
@@ -199,7 +242,13 @@ RSpec.describe RbGen::Class do
 
       describe "with single module" do
         it "generates class without parent class and call methods with 2 args" do
-          expect(RbGen::Class.new("Greeter", modules: %w[Services], methods: {call: %w[request response]}).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              modules: %w[Services],
+              methods: {call: %w[request response]}
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Services
@@ -214,7 +263,14 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class and call method with required keyword args" do
-          expect(RbGen::Class.new("Greeter", "BaseService", modules: %w[Services], methods: {call: %w[request: response:]}).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              parent: "BaseService",
+              modules: %w[Services],
+              methods: {call: %w[request: response:]}
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Services
@@ -254,12 +310,14 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class and two methods" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            "BaseService",
-            modules: %w[Admin Services],
-            methods: {initialize: ["context"], call: ["args"]}
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              parent: "BaseService",
+              modules: %w[Admin Services],
+              methods: {initialize: ["context"], call: ["args"]}
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Admin
@@ -317,10 +375,7 @@ RSpec.describe RbGen::Class do
 
         it "raises error when ivars don't lead with @" do
           expect {
-            RbGen::Class.new(
-              "Greeter",
-              ivars: [:name]
-            ).to_s
+            RbGen::Class.new("Greeter", ivars: [:name]).to_s
           }.to(raise_error(RbGen::InvalidInstanceVariablesError))
         end
 
@@ -335,12 +390,14 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with parent class, and requires" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            "BaseService",
-            modules: %w[Internal Admin Services],
-            requires: ["roobi/fake"]
-          ).to_s).to(
+          expect(
+              RbGen::Class.new(
+                "Greeter",
+                parent: "BaseService",
+                modules: %w[Internal Admin Services],
+                requires: ["roobi/fake"]
+              ).to_s
+            ).to(
             eq(
               <<~OUTPUT
                 require "roobi/fake"
@@ -361,10 +418,12 @@ RSpec.describe RbGen::Class do
 
       describe "with includes" do
         it "generates class with includes" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            includes: ["Enumerable", %(Import["external.api"])]
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              includes: ["Enumerable", %(Import["external.api"])]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter
@@ -377,11 +436,13 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with includes and ivars" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            includes: ["Enumerable", %(Import["external.api"])],
-            ivars: [:@name]
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              includes: ["Enumerable", %(Import["external.api"])],
+              ivars: [:@name]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter
@@ -402,11 +463,13 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with includes and one method" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            includes: ["Enumerable", %(Import["external.api"])],
-            methods: {call: ["name"]}
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              includes: ["Enumerable", %(Import["external.api"])],
+              methods: {call: ["name"]}
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter
@@ -422,13 +485,15 @@ RSpec.describe RbGen::Class do
         end
       end
 
-      describe "with inline syntax name for module and class" do
-        it "generates class with includes" do
-          expect(RbGen::Class.new(
-            "Services::Greeter",
-            "Internal::BaseService",
-            modules: ["Internal::Admin"]
-          ).to_s).to(
+      describe "with inline syntax name for parent, module, class" do
+        it "generates class with inline-syntax" do
+          expect(
+            RbGen::Class.new(
+              "Services::Greeter",
+              parent: "Internal::BaseService",
+              modules: ["Internal::Admin"]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 module Internal::Admin
@@ -443,11 +508,13 @@ RSpec.describe RbGen::Class do
 
       describe "with magic comment" do
         it "generates class with custom magic comment" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            modules: ["Internal"],
-            magic_comments: {value: true}
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              modules: ["Internal"],
+              magic_comments: {value: true}
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 # value: true
@@ -464,10 +531,12 @@ RSpec.describe RbGen::Class do
 
       describe "with top contents" do
         it "generates simple class with only top contents as comment" do
-          expect(RbGen::Class.new(
-            "Foo",
-            top_contents: ["# code goes here"]
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Foo",
+              top_contents: ["# code goes here"]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Foo
@@ -479,12 +548,14 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with top contents in correct spot" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            includes: ["Validatable"],
-            ivars: [:@name],
-            top_contents: ["before_call :validate"]
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              includes: ["Validatable"],
+              ivars: [:@name],
+              top_contents: ["before_call :validate"]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 class Greeter
@@ -514,11 +585,13 @@ RSpec.describe RbGen::Class do
 
       describe "top-level" do
         it "generates class without parent class and both requires and relative_requires" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            requires: ["roobi/fake"],
-            relative_requires: ["secret/parser"]
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              requires: ["roobi/fake"],
+              relative_requires: ["secret/parser"]
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 # frozen_string_literal: true
@@ -534,11 +607,13 @@ RSpec.describe RbGen::Class do
         end
 
         it "generates class with sorted custom magic comments, including frozen_string_literal" do
-          expect(RbGen::Class.new(
-            "Greeter",
-            modules: ["Internal"],
-            magic_comments: {abc: 123, value: true}
-          ).to_s).to(
+          expect(
+            RbGen::Class.new(
+              "Greeter",
+              modules: ["Internal"],
+              magic_comments: {abc: 123, value: true}
+            ).to_s
+          ).to(
             eq(
               <<~OUTPUT
                 # abc: 123

@@ -9,7 +9,7 @@ module RbGen
     # rubocop:disable Metrics/ParameterLists
     def initialize(
       name,
-      parent = nil,
+      parent: nil,
       modules: [],
       requires: [],
       relative_requires: [],
