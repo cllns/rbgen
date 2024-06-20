@@ -109,25 +109,27 @@ module RbGen
     def class_lines
       [
         class_definition,
-        *includes_lines,
-        ("" if includes.any? && class_contents_lines.any?),
         *class_contents_lines,
         "end"
       ].compact
     end
 
     def includes_lines
-      includes.map do |include|
-        indent(%(include #{include}))
+      if includes.any?
+        includes.map do |include|
+          "include #{include}"
+        end
       end
     end
 
     def class_contents_lines
-      @class_contents_lines ||= [
+      line_groups = [
+        includes_lines,
         initialize_lines,
-        methods_lines,
-        private_contents_lines
-      ].compact.flatten.map { |line| indent(line) }
+        *methods_lines,
+        *private_contents_lines
+      ].compact
+      add_empty_line_between_groups(line_groups).flatten.map { |line| indent(line) }
     end
 
     def initialize_lines
@@ -135,8 +137,7 @@ module RbGen
         [
           method_definition("initialize", ivar_names.map { |ivar| "#{ivar}:" }),
           ivar_names.map { |ivar_name| indent("@#{ivar_name} = #{ivar_name}") }.flatten,
-          "end",
-          ""
+          "end"
         ]
       end
     end
@@ -144,20 +145,16 @@ module RbGen
     def private_contents_lines
       if ivar_names.any?
         [
-          " ",
           "private",
-          "",
           "attr_reader #{ivar_names.map { |ivar| ":#{ivar}" }.join(', ')}"
         ]
       end
     end
 
     def methods_lines
-      # To add a newline between each method, we add an empty string to the end
-      # of each method definition then remove the very last one
-      methods.flat_map do |method_name, args|
-        [method_definition(method_name, args), "end", ""]
-      end[0...-1]
+      methods.map do |method_name, args|
+        [method_definition(method_name, args), "end"]
+      end
     end
 
     def class_definition
@@ -206,6 +203,11 @@ module RbGen
       if lines.any?
         lines << ""
       end
+    end
+
+    def add_empty_line_between_groups(line_groups)
+      # We add an empty line after every group then remove the last one
+      line_groups.flat_map { |line_group| [line_group, ""] }[0...-1]
     end
   end
 end

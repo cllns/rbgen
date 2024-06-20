@@ -376,12 +376,11 @@ RSpec.describe RbGen::Class do
           )
         end
 
-        it "generates class with includes, ivars and method" do
+        it "generates class with includes and ivars" do
           expect(RbGen::Class.new(
             "Greeter",
             includes: ["Enumerable", %(Import["external.api"])],
-            ivars: [:@name],
-            methods: {call: nil}
+            ivars: [:@name]
           ).to_s).to(
             eq(
               <<~OUTPUT
@@ -393,12 +392,29 @@ RSpec.describe RbGen::Class do
                     @name = name
                   end
 
-                  def call
-                  end
-
                   private
 
                   attr_reader :name
+                end
+              OUTPUT
+            )
+          )
+        end
+
+        it "generates class with includes and one method" do
+          expect(RbGen::Class.new(
+            "Greeter",
+            includes: ["Enumerable", %(Import["external.api"])],
+            methods: {call: ["name"]}
+          ).to_s).to(
+            eq(
+              <<~OUTPUT
+                class Greeter
+                  include Enumerable
+                  include Import["external.api"]
+
+                  def call(name)
+                  end
                 end
               OUTPUT
             )
