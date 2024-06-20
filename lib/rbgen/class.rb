@@ -15,6 +15,7 @@ module RbGen
       relative_requires: [],
       methods: {},
       includes: [],
+      magic_comments: {},
       ivars: []
     )
       @name = name
@@ -24,6 +25,7 @@ module RbGen
       @relative_requires = relative_requires
       @methods = methods
       @includes = includes
+      @magic_comments = magic_comments.merge(frozen_string_literal).compact.sort
       @ivar_names = parse_ivar_names!(ivars)
 
       raise DuplicateInitializeMethodError if methods.key?(:initialize) && ivars.any?
@@ -40,7 +42,17 @@ module RbGen
 
     private
 
-    attr_reader :name, :parent, :modules, :requires, :relative_requires, :methods, :includes, :ivar_names
+    attr_reader(
+      :name,
+      :parent,
+      :modules,
+      :requires,
+      :relative_requires,
+      :methods,
+      :includes,
+      :magic_comments,
+      :ivar_names
+    )
 
     def lines(remaining_modules)
       this_module, *rest_modules = remaining_modules
@@ -60,20 +72,26 @@ module RbGen
     end
 
     def file_directives
-      [frozen_string_literal, import_lines].compact
+      [magic_comments_lines, import_lines].compact
+    end
+
+    def magic_comments_lines
+      lines = magic_comments
+        .map { |magic_key, magic_value| "# #{magic_key}: #{magic_value}" }
+      add_empty_line_if_any(lines)
     end
 
     def frozen_string_literal
       if RbGen.config.frozen_string_literal
-        ["# frozen_string_literal: true", ""].join("\n")
+        {frozen_string_literal: true}
+      else
+        {}
       end
     end
 
     def import_lines
       lines = [requires_lines, relative_requires_lines].flatten.compact
-      if lines.any?
-        lines << ""
-      end
+      add_empty_line_if_any(lines)
     end
 
     def requires_lines
@@ -180,6 +198,12 @@ module RbGen
         source_code
       else
         raise GeneratedUnparseableCodeError.new(source_code)
+      end
+    end
+
+    def add_empty_line_if_any(lines)
+      if lines.any?
+        lines << ""
       end
     end
   end

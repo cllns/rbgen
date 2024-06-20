@@ -25,6 +25,7 @@ gem "rbgen", github: "cllns/rbgen"
 - [x] Add `include` modules into class
 - [ ] Add prepend arbitrary code to class
 - [x] Add tests/notes for inline module syntax
+- [x] Add support for arbitrary magic comments
 
 ### Maybe
 - [ ] Add `RbGen::Module`

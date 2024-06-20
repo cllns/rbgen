@@ -395,6 +395,27 @@ RSpec.describe RbGen::Class do
           )
         end
       end
+
+      describe "with magic comment" do
+        it "generates class with custom magic comment" do
+          expect(RbGen::Class.new(
+            "Greeter",
+            modules: ["Internal"],
+            magic_comments: {value: true}
+          ).to_s).to(
+            eq(
+              <<~OUTPUT
+                # value: true
+
+                module Internal
+                  class Greeter
+                  end
+                end
+              OUTPUT
+            )
+          )
+        end
+      end
     end
 
     describe "with frozen_string_literal (default)" do
@@ -417,6 +438,27 @@ RSpec.describe RbGen::Class do
                 require_relative "secret/parser"
 
                 class Greeter
+                end
+              OUTPUT
+            )
+          )
+        end
+
+        it "generates class with sorted custom magic comments, including frozen_string_literal" do
+          expect(RbGen::Class.new(
+            "Greeter",
+            modules: ["Internal"],
+            magic_comments: {abc: 123, value: true}
+          ).to_s).to(
+            eq(
+              <<~OUTPUT
+                # abc: 123
+                # frozen_string_literal: true
+                # value: true
+
+                module Internal
+                  class Greeter
+                  end
                 end
               OUTPUT
             )
