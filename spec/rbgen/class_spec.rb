@@ -375,6 +375,35 @@ RSpec.describe RbGen::Class do
             )
           )
         end
+
+        it "generates class with includes, ivars and method" do
+          expect(RbGen::Class.new(
+            "Greeter",
+            includes: ["Enumerable", %(Import["external.api"])],
+            ivars: [:@name],
+            methods: {call: nil}
+          ).to_s).to(
+            eq(
+              <<~OUTPUT
+                class Greeter
+                  include Enumerable
+                  include Import["external.api"]
+
+                  def initialize(name:)
+                    @name = name
+                  end
+
+                  def call
+                  end
+
+                  private
+
+                  attr_reader :name
+                end
+              OUTPUT
+            )
+          )
+        end
       end
 
       describe "with inline syntax name for module and class" do

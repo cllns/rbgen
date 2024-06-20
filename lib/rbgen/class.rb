@@ -110,6 +110,7 @@ module RbGen
       [
         class_definition,
         *includes_lines,
+        ("" if includes.any? && class_contents_lines.any?),
         *class_contents_lines,
         "end"
       ].compact
@@ -122,7 +123,7 @@ module RbGen
     end
 
     def class_contents_lines
-      [
+      @class_contents_lines ||= [
         initialize_lines,
         methods_lines,
         private_contents_lines
