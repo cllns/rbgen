@@ -15,6 +15,7 @@ module RbGen
       relative_requires: [],
       methods: {},
       includes: [],
+      top_contents: [],
       magic_comments: {},
       ivars: []
     )
@@ -25,6 +26,7 @@ module RbGen
       @relative_requires = relative_requires
       @methods = methods
       @includes = includes
+      @top_contents = top_contents
       @magic_comments = magic_comments.merge(frozen_string_literal).compact.sort
       @ivar_names = parse_ivar_names!(ivars)
 
@@ -50,6 +52,7 @@ module RbGen
       :relative_requires,
       :methods,
       :includes,
+      :top_contents,
       :magic_comments,
       :ivar_names
     )
@@ -122,9 +125,16 @@ module RbGen
       end
     end
 
+    def top_contents_lines
+      if top_contents.any?
+        top_contents
+      end
+    end
+
     def class_contents_lines
       line_groups = [
         includes_lines,
+        top_contents_lines,
         initialize_lines,
         *methods_lines,
         *private_contents_lines

@@ -461,6 +461,50 @@ RSpec.describe RbGen::Class do
           )
         end
       end
+
+      describe "with top contents" do
+        it "generates simple class with only top contents as comment" do
+          expect(RbGen::Class.new(
+            "Foo",
+            top_contents: ["# code goes here"]
+          ).to_s).to(
+            eq(
+              <<~OUTPUT
+                class Foo
+                  # code goes here
+                end
+              OUTPUT
+            )
+          )
+        end
+
+        it "generates class with top contents in correct spot" do
+          expect(RbGen::Class.new(
+            "Greeter",
+            includes: ["Validatable"],
+            ivars: [:@name],
+            top_contents: ["before_call :validate"]
+          ).to_s).to(
+            eq(
+              <<~OUTPUT
+                class Greeter
+                  include Validatable
+
+                  before_call :validate
+
+                  def initialize(name:)
+                    @name = name
+                  end
+
+                  private
+
+                  attr_reader :name
+                end
+              OUTPUT
+            )
+          )
+        end
+      end
     end
 
     describe "with frozen_string_literal (default)" do
