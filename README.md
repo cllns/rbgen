@@ -26,12 +26,13 @@ gem "rbgen", github: "cllns/rbgen"
 - [x] Add prepend arbitrary code to class (`top_contents`)
 - [x] Add tests/notes for inline module syntax
 - [x] Add support for arbitrary magic comments
+- [ ] Move parent to kwarg
+- [ ] Add `RbGen::Module`
 
 ### Maybe
-- [ ] Add `RbGen::Module`
-- [ ] Add CLI tool
 - [ ] Add dry-inflector support
 - [ ] Add support for writing to filesystem (including config for base location?)
+- [ ] Add CLI tool
 
 ## Usage
 
